@@ -3,4 +3,9 @@ djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
 psycopg2-binary   # if using Postgres
+PyYAML>=6.0
+# Production server (e.g., on Render, Heroku)
+gunicorn>=21.2.0
+# Static files (optional, useful for API docs or admin CSS/JS)
+whitenoise>=6.6.0
   
