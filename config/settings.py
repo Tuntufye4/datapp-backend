@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-jc^-lioutu277ay@@$l9^7ve9r4d@ejuuj^67^vl-v(poanjjz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['datapp-backend.onrender.com','127.0.0.1', 'localhost']
       
      
 # Application definition
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite dev server
-]
+]         
 
 CORS_ALLOW_ALL_ORIGINS = True  # dev only
 
