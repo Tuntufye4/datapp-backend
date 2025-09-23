@@ -1,11 +1,11 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db.models import Count, Avg
+from django.db.models import Count
 from .models import Case
 from .serializers import CaseSerializer
 
-
+   
 class CHWCaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all().order_by('-created_at')
     serializer_class = CaseSerializer   
@@ -61,23 +61,31 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         total_cases = qs.count()
         male_cases = qs.filter(sex='Male').count()
         female_cases = qs.filter(sex='Female').count()
-        
+        confirmed_cases = qs.filter(classification='Confirmed').count()
+        probable_cases = qs.filter(classification='Probable').count()   
+
         # Calculate average cases per patient (using distinct patient_name)
         distinct_patients = qs.values("patient_name").distinct().count()
         avg_total_cases = total_cases / distinct_patients if distinct_patients > 0 else 0
 
-        distinct_male_patients = qs.values("Male").distinct().count()
+        # Distinct male/female patients
+        distinct_male_patients = qs.filter(sex="Male").values("patient_name").distinct().count()
         avg_male_cases = male_cases / distinct_male_patients if distinct_male_patients > 0 else 0
 
-        distinct_female_patients = qs.values("Female").distinct().count()
+        distinct_female_patients = qs.filter(sex="Female").values("patient_name").distinct().count()
         avg_female_cases = female_cases / distinct_female_patients if distinct_female_patients > 0 else 0
+        
+      
 
         return Response({
             "total_cases": total_cases,
             "male_cases": male_cases,
             "female_cases": female_cases, 
-            "avg_total_cases": round(avg_total_cases, 2),     # rounded to 2 decimals   
-            "avg_male_cases" : round(avg_male_cases, 2),
-            "avg_female_cases" : round(avg_female_cases, 2)
-        })
-  
+            "confirmed_cases": confirmed_cases, 
+            "probale_cases": probable_cases,     
+            "avg_total_cases": round(avg_total_cases, 2),   
+            "avg_male_cases": round(avg_male_cases, 2),
+            "avg_female_cases": round(avg_female_cases, 2),
+        })         
+
+               
