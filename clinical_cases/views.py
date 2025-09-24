@@ -7,11 +7,11 @@ from .serializers import CaseSerializer
 
 class ClinicalCaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all().order_by('-created_at')
-    serializer_class = CaseSerializer
+    serializer_class = CaseSerializer    
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.patient_name)
 
     @action(detail=False, methods=['get'], url_path='by-district')
     def by_district(self, request):
@@ -20,7 +20,7 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
         """
         data = (
             Case.objects
-            .filter(created_by=request.user)
+            .filter(created_by=request.patient_name)
             .values('district')
             .annotate(count=Count('id'))
             .order_by('district')
@@ -34,7 +34,7 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
         """
         data = (
             Case.objects
-            .filter(created_by=request.user)
+            .filter(created_by=request.patient_name)
             .values('disease')
             .annotate(count=Count('id'))
             .order_by('disease')
@@ -46,9 +46,9 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
         """
         Returns general statistics for the logged-in user.  
         """
-        total_cases = Case.objects.filter(created_by=request.user).count()
-        male_cases = Case.objects.filter(created_by=request.user, sex='Male').count()
-        female_cases = Case.objects.filter(created_by=request.user, sex='Female').count()
+        total_cases = Case.objects.filter(created_by=request.patient_name).count()
+        male_cases = Case.objects.filter(created_by=request.patient_name, sex='Male').count()
+        female_cases = Case.objects.filter(created_by=request.patient_name, sex='Female').count()
 
 
 

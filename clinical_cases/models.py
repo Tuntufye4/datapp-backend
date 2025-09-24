@@ -32,7 +32,7 @@ class Case(models.Model):
     procedures_done = models.TextField(blank=True)  
     discharge_notes = models.TextField(blank=True)
     follow_up_plan = models.TextField(blank=True)
-
+  
     def __str__(self):
         return f"{self.disease} - {self.patient_name or 'anon'}"
   
