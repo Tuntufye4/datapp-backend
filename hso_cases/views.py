@@ -52,11 +52,14 @@ class HSOCaseViewSet(viewsets.ModelViewSet):
         total_cases = self.get_queryset().count()
         male_cases = self.get_queryset().filter(sex='Male').count()
         female_cases = self.get_queryset().filter(sex='Female').count()  
-        
+        classification_prob = self.get_queryset().filter(Classification='Probable').count()
+        classification_conf = self.get_queryset().filter(Classification='Confirmed').count()
 
         return Response({
-            "total_cases": total_cases,
+            "total_cases": total_cases,   
             "male_cases": male_cases,
-            "female_cases": female_cases   
+            "female_cases": female_cases,  
+            "classification_prob": classification_prob,  
+            "classification_conf": classification_conf   
         })
      

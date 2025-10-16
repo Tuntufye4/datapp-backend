@@ -49,11 +49,17 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
         total_cases = Case.objects.filter(created_by=request.patient_name).count()
         male_cases = Case.objects.filter(created_by=request.patient_name, sex='Male').count()
         female_cases = Case.objects.filter(created_by=request.patient_name, sex='Female').count()
+        classification_prob = Case.objects.filter(created_by=request.patient_name, classification='Probable').count()
+        classification_conf = Case.objects.filter(created_by=request.patient_name, classification='Confirmed').count()
+
 
 
 
         return Response({
             "total_cases": total_cases,
             "male_cases": male_cases,
-            "female_cases": female_cases      
-        })
+            "female_cases": female_cases,
+            "classification_prob": classification_prob,
+            "classification_conf": classification_conf
+        })  
+    
