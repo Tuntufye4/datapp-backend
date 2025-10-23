@@ -54,12 +54,26 @@ class HSOCaseViewSet(viewsets.ModelViewSet):
         female_cases = self.get_queryset().filter(sex='Female').count()  
         classification_prob = self.get_queryset().filter(Classification='Probable').count()
         classification_conf = self.get_queryset().filter(Classification='Confirmed').count()
+        total_case_source = self.get_queryset().count()
+        sch_case_source =self.get_queryset().filter(case_source='School').count()
+        bor_case_source = self.get_queryset().filter(case_source='Border_post').count()
+        com_case_source = self.get_queryset().filter(case_source='Community').count()
+        total_reporting_method = self.get_queryset().count()
+        sms_reporting_method = self.get_queryset().filter(reporting_method='SMS').count()
+        ele_reporting_method = self.get_queryset().filter(reporting_method='Electronic_form').count()
 
         return Response({
             "total_cases": total_cases,   
             "male_cases": male_cases,
             "female_cases": female_cases,  
             "classification_prob": classification_prob,  
-            "classification_conf": classification_conf   
+            "classification_conf": classification_conf, 
+            "total_case_source" : total_case_source, 
+            "sch_case_source" : sch_case_source,
+            "bor_case_source" : bor_case_source,
+            "com_case_source" : com_case_source,
+            "total_reporting_method": total_reporting_method,
+            "sms_reporting_method" : sms_reporting_method,
+            "ele_reporting_method" : ele_reporting_method,   
         })
-     
+      
