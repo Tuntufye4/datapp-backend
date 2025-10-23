@@ -65,6 +65,9 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         probable_cases = qs.filter(classification='Probable').count()   
         per_housing_type = qs.filter(housing_type='Permanent').count()
         sem_housing_type = qs.filter(housing_type='Semi-permanent').count()
+        out_visit_type = qs.filter(visit_type='Outpatient').count()
+        inp_visit_type = qs.filter(visit_type='Inpatient').count()
+        em_visit_type = qs.filter(visit_type='Emergency').count()   
 
 
         # Calculate average cases per patient (using distinct patient_name)
@@ -91,6 +94,9 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
             "avg_female_cases": round(avg_female_cases, 2),
             "per_housing_type": per_housing_type,  
             "sem_housing_type": sem_housing_type,
+            "out_visit_type": out_visit_type,
+            "inp_visit_type": inp_visit_type,
+            "em_visit_type": em_visit_type,
         })         
 
                
