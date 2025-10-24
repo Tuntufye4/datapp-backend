@@ -7,7 +7,7 @@ from .serializers import CaseSerializer
 
 class ClinicalCaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all().order_by('-created_at')
-    serializer_class = CaseSerializer    
+    serializer_class = CaseSerializer      
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -38,6 +38,31 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
             .values('disease')
             .annotate(count=Count('id'))
             .order_by('disease')
+        )
+        return Response(list(data))
+
+    @action(detail=False, methods=['get'], url_path='house_types')
+    def house_types(self, request):
+
+        data = (
+            Case.objects
+            .filter(created_by=request.patient_name)
+            .values('housing_type')
+            .annotate(count=Count('id'))
+            .order_by('housing_type')
+        )
+        return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='admission_stats')
+    def admission_stats(self, request):
+
+        data = (
+
+            Case.objects
+            .filter(created_by=request.patient_name)
+            .values('admission_status')
+            .annotate(count=Count('id'))
+            .order_by('admission_status')
         )
         return Response(list(data))
 

@@ -47,6 +47,51 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
             .order_by('disease')
         )
         return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='visits')
+    def visits(self, request):
+
+        qs = Case.objects.all()
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('visit_type') 
+            .annotate(count=Count('id'))
+            .order_by('visit_type')
+        )
+        return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='house_type')
+    def house_type(self, request):
+
+        qs = Case.objects.all()
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('housing_type') 
+            .annotate(count=Count('id'))
+            .order_by('housing_type')
+        )  
+        return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='report_method')
+    def report_method(self, request):
+
+        qs = Case.objects.all()  
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('reporting_method') 
+            .annotate(count=Count('id'))
+            .order_by('reporting_method')
+        )  
+        return Response(list(data))
 
     @action(detail=False, methods=['get'], url_path='statistics')
     def statistics(self, request):
