@@ -31,6 +31,25 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         )
         return Response(list(data))
 
+    @action(detail=False, methods=['get'], url_path='gender-distribution')
+    def gender_distribution(self, request):
+
+        """
+        Returns the number of cases per gender filtered by patient_name if provided.
+        """
+
+        qs = Case.objects.all()
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('sex')
+            .annotate(count=Count('id'))
+            .order_by('sex')
+        )
+        return Response(list(data))  
+
     @action(detail=False, methods=['get'], url_path='disease-distribution')
     def disease_distribution(self, request):
         """
@@ -78,8 +97,8 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         )  
         return Response(list(data))
     
-    @action(detail=False, methods=['get'], url_path='report_method')
-    def report_method(self, request):
+    @action(detail=False, methods=['get'], url_path='reporting_methods')  
+    def reporting_methods(self, request):
 
         qs = Case.objects.all()  
         patient_name = request.query_params.get("patient_name")
@@ -93,7 +112,37 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         )  
         return Response(list(data))
 
-    @action(detail=False, methods=['get'], url_path='statistics')
+    @action(detail=False, methods=['get'], url_path='treatments')  
+    def treatments(self, request):
+
+        qs = Case.objects.all()  
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('treatment') 
+            .annotate(count=Count('id'))
+            .order_by('treatment')
+        )  
+        return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='followupplan')  
+    def followupplan(self, request):
+
+        qs = Case.objects.all()  
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)
+
+        data = (
+            qs.values('follow_up_plan') 
+            .annotate(count=Count('id'))  
+            .order_by('follow_up_plan')
+        )  
+        return Response(list(data))
+
+    @action(detail=False, methods=['get'], url_path='statistics')   
     def statistics(self, request):
         """
         Returns general statistics filtered by patient_name if provided.
@@ -127,7 +176,7 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
         avg_female_cases = female_cases / distinct_female_patients if distinct_female_patients > 0 else 0
         
       
-
+   
         return Response({
             "total_cases": total_cases,  
             "male_cases": male_cases,
@@ -139,7 +188,7 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
             "avg_female_cases": round(avg_female_cases, 2),
             "per_housing_type": per_housing_type,  
             "sem_housing_type": sem_housing_type,
-            "out_visit_type": out_visit_type,
+            "out_visit_type": out_visit_type,   
             "inp_visit_type": inp_visit_type,
             "em_visit_type": em_visit_type,
         })         

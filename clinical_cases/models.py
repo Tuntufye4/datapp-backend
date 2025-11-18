@@ -15,7 +15,7 @@ class Case(models.Model):
     notes = models.TextField(blank=True)    
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)   
     treatment = models.TextField(blank=True)
     diagnosis = models.TextField(blank=True)
     surveillance_notes = models.TextField(blank=True)
