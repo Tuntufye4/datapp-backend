@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from .models import Case
 from .serializers import CaseSerializer   
-
+   
 
 class HSOCaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all().order_by('-created_at')
@@ -60,8 +60,8 @@ class HSOCaseViewSet(viewsets.ModelViewSet):
         return Response(list(data))
 
     
-    @action(detail=False, methods=['get'], url_path='case_sources')
-    def case_sources(self, request):
+    @action(detail=False, methods=['get'], url_path='case-source')
+    def case_sources(self, request):  
         """
         Returns case counts by case_source for the logged-in user.
         """

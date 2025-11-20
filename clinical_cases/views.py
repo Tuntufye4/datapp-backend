@@ -128,8 +128,8 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
         )
         return Response(list(data))
     
-    @action(detail=False, methods=['get'], url_path='admission_stats')
-    def admission_stats(self, request):
+    @action(detail=False, methods=['get'], url_path='admission-stats')
+    def admissionstats(self, request):
 
         data = (
 
@@ -166,6 +166,33 @@ class ClinicalCaseViewSet(viewsets.ModelViewSet):
             .order_by('triage_level')
         )
         return Response(list(data))
+    
+
+    @action(detail=False, methods=['get'], url_path='procedures-done')
+    def proceduresdone(self, request):
+
+        data = (    
+            Case.objects
+            .filter(created_by=request.patient_name)
+            .values('procedures_done')    
+            .annotate(count=Count('id'))
+            .order_by('procedures_done')
+        )
+        return Response(list(data))
+    
+    @action(detail=False, methods=['get'], url_path='lab-tests-ordered')
+    def labtestsordered(self, request):  
+
+        data = (    
+            Case.objects
+            .filter(created_by=request.patient_name)
+            .values('lab_tests_ordered')    
+            .annotate(count=Count('id'))
+            .order_by('lab_tests_ordered')
+        )
+        return Response(list(data))
+    
+
 
     @action(detail=False, methods=['get'], url_path='statistics')
     def statistics(self, request):

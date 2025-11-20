@@ -141,6 +141,23 @@ class CHWCaseViewSet(viewsets.ModelViewSet):
             .order_by('follow_up_plan')
         )  
         return Response(list(data))
+    
+
+    @action(detail=False, methods=['get'], url_path='encounterlocation')  
+    def encounterlocation(self, request):
+
+        qs = Case.objects.all()  
+        patient_name = request.query_params.get("patient_name")
+        if patient_name:
+            qs = qs.filter(patient_name__icontains=patient_name)     
+
+        data = (
+            qs.values('encounter_location') 
+            .annotate(count=Count('id'))  
+            .order_by('encounter_location')   
+        )  
+        return Response(list(data))
+    
 
     @action(detail=False, methods=['get'], url_path='statistics')   
     def statistics(self, request):
